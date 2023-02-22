@@ -1,0 +1,19 @@
+﻿input {
+    font-size: 15px;
+    padding-top: 0.9rem;
+    padding-right: 20px;
+    color: #fff;
+    font-weight: 400;
+    background: transparent;
+    border: none;
+}
+
+    input:hover {
+        color: #01D28E
+    }
+
+.ftco-navbar-light.scrolled form input[type="submit"] {
+    padding-top: 0.9rem !important;
+    padding-bottom: 0.9rem !important;
+    color: #000000 !important;
+}
