@@ -22,13 +22,12 @@
         <div class="row">
             @foreach (var car in Model)
             {
-                @{
-                    var image = car.Images.Last();
+                var image = car.Images.Last();
 
-                    string imreBase64Data = Convert.ToBase64String(image.Bytes);
+                string imreBase64Data = Convert.ToBase64String(image.Bytes);
 
-                    string imgDataURL = string.Format("data:image/jpg;base64,{0}", imreBase64Data);
-                }
+                string imgDataURL = string.Format("data:image/jpg;base64,{0}", imreBase64Data);
+                
                 <div class="col-md-4">
                     <div class="car-wrap rounded ftco-animate">
 
