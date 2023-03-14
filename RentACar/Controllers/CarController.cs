@@ -37,12 +37,38 @@ namespace RentACar.Controllers
 
             var car = await _context.Cars
                 .Include(c => c.Category)
+                .Include(i => i.Images)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (car == null)
             {
                 return NotFound();
             }
 
+            return View(car);
+        }
+
+        [HttpGet]
+        public IActionResult RentACar(int? id)
+        {
+            ViewData["Users"] = new SelectList(_context.Users, "Id", "UserName");
+            ViewData["Locations"] = new SelectList(_context.Locations, "Id", "Name");
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RentACar([FromForm] RentedCar car)
+        {
+            car.CarId = int.Parse(Request.RouteValues["id"].ToString());
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(car);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            ViewData["Users"] = new SelectList(_context.Users, "Id", "UserName");
+            ViewData["Locations"] = new SelectList(_context.Locations, "Id", "Name");
             return View();
         }
 
@@ -79,7 +105,6 @@ namespace RentACar.Controllers
                             using var memoryStream = new MemoryStream();
                             await formFile.CopyToAsync(memoryStream);
 
-                            
                                 var newphoto = new Image()
                                 {
                                     Bytes = memoryStream.ToArray(),

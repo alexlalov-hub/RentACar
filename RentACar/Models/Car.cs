@@ -25,6 +25,8 @@ namespace RentACar.Models
         [Required]
         public float DailyPrice { get; set; }
 
+        public string Description { get; set; } 
+
         [Required]
         public int CategoryId { get; set; }
 

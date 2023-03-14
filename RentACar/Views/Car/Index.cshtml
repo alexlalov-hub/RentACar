@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/vizdevelopment_lambo-scaled.jpg');" data-stellar-background-ratio="0.5">
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/18015-MC20BluInfinito-scaled-e1666008987698.jpg');" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
@@ -30,7 +30,6 @@
                 
                 <div class="col-md-4">
                     <div class="car-wrap rounded ftco-animate">
-
                         <img class="img rounded d-flex align-items-end" src=@imgDataURL alt="@car.Brand @car.Model">
                     </div>
                     <div class="text">
@@ -39,13 +38,16 @@
                             <span class="cat">@car.Brand</span>
                             <p class="price ml-auto">@car.DailyPrice<span>/day</span></p>
                         </div>
-                        <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a></p>
+                        <p class="d-flex mb-0 d-block">
+                            <a asp-area="" asp-controller="Car" asp-action="RentACar" asp-route-id="@car.Id" class="btn btn-primary py-2 mr-1">Rent</a> 
+                            <a asp-area="" asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-secondary py-2 ml-1">Details</a>
+                        </p>
                     </div>
                 </div>
             }
 
         </div>
-        <div class="row mt-5">
+        @*<div class="row mt-5">
             <div class="col text-center">
                 <div class="block-27">
                     <ul>
@@ -59,6 +61,6 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div>*@
     </div>
 </section>
