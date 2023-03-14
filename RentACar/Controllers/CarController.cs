@@ -50,6 +50,12 @@ namespace RentACar.Controllers
         [HttpGet]
         public IActionResult RentACar(int? id)
         {
+            if (id == null || _context.Cars == null)
+            {
+                return NotFound();
+            }
+
+
             ViewData["Users"] = new SelectList(_context.Users, "Id", "UserName");
             ViewData["Locations"] = new SelectList(_context.Locations, "Id", "Name");
             return View();
@@ -60,8 +66,11 @@ namespace RentACar.Controllers
         {
             car.CarId = int.Parse(Request.RouteValues["id"].ToString());
 
+            var carToRent = await _context.Cars.FindAsync(car.CarId);
+
             if (ModelState.IsValid)
             {
+                carToRent.IsRented = true;
                 _context.Add(car);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
