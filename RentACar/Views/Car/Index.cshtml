@@ -27,7 +27,7 @@
                 string imreBase64Data = Convert.ToBase64String(image.Bytes);
 
                 string imgDataURL = string.Format("data:image/jpg;base64,{0}", imreBase64Data);
-                
+
                 <div class="col-md-4">
                     <div class="car-wrap rounded ftco-animate">
                         <img class="img rounded d-flex align-items-end" src=@imgDataURL alt="@car.Brand @car.Model">
@@ -41,12 +41,19 @@
                         <p class="d-flex mb-0 d-block">
                             @if (!car.IsRented)
                             {
-                                <a asp-area="" asp-controller="Car" asp-action="RentACar" asp-route-id="@car.Id" class="btn btn-primary py-2 mr-1">Rent</a>
+                                <a asp-area="" asp-controller="Car" asp-action="RentACar" asp-route-id="@car.Id" class="btn btn-primary py-2">Rent</a>
 
-                            }else{
-                                <a asp-area="" asp-controller="Car" asp-action="ReturnACar" asp-route-id="@car.Id" class="btn btn-primary py-2 mr-1">Return</a>
+                            }
+                            else
+                            {
+                                <a asp-area="" asp-controller="Car" asp-action="ReturnACar" asp-route-id="@car.Id" class="btn btn-primary py-2">Return</a>
                             }
                             <a asp-area="" asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-secondary py-2 ml-1">Details</a>
+                            @if (User.IsInRole("Employee"))
+                            {
+                                <a asp-area="" asp-controller="Car" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning py-2 ml-1">Edit</a>
+                                <a asp-area="" asp-controller="Car" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger py-2 ml-1">Delete</a>
+                            }
                         </p>
                     </div>
                 </div>
@@ -54,19 +61,19 @@
 
         </div>
         @*<div class="row mt-5">
-            <div class="col text-center">
-                <div class="block-27">
-                    <ul>
-                        <li><a href="#">&lt;</a></li>
-                        <li class="active"><span>1</span></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">&gt;</a></li>
-                    </ul>
-                </div>
-            </div>
+        <div class="col text-center">
+        <div class="block-27">
+        <ul>
+        <li><a href="#">&lt;</a></li>
+        <li class="active"><span>1</span></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&gt;</a></li>
+        </ul>
+        </div>
+        </div>
         </div>*@
     </div>
 </section>

@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - RentACar</title>
-    
+
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css">
@@ -31,7 +31,7 @@
 
     <link rel="stylesheet" href="~/css/style.css">
 
-    <link  rel="stylesheet" href="~/css/loginpartial.css"/>
+    <link rel="stylesheet" href="~/css/loginpartial.css" />
 
     <link rel="stylesheet" href="~/css/site.css">
 </head>
@@ -49,17 +49,18 @@
                     <li class="nav-item active"><a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">Home</a></li>
                     <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="About" class="nav-link">About</a></li>
                     <li class="nav-item"><a asp-area="" asp-controller="Car" asp-action="Index" class="nav-link">Cars</a></li>
-                    <li class="nav-item"><a asp-area="" asp-controller="Car" asp-action="Create" class="nav-link">Add A Car</a></li>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li class="nav-item"><a asp-area="" asp-controller="Car" asp-action="Index" class="nav-link">Add Car</a></li>
-                    }
+                    <li class="nav-item"><a asp-area="" asp-controller="Category" asp-action="Index" class="nav-link">Categories</a></li>
+                    @*@if (User.IsInRole("Employee"))
+                    {*@
+                        <li class="nav-item"><a asp-area="" asp-controller="Car" asp-action="Create" class="nav-link">Add A Car</a></li>
+                        <li class="nav-item"><a asp-area="" asp-controller="Category" asp-action="Create" class="nav-link">Add A Category</a></li>
+                    @*}*@
                     <partial name="_LoginPartial"></partial>
                 </ul>
             </div>
         </div>
     </nav>
-    
+
     <div>
         @RenderBody()
     </div>

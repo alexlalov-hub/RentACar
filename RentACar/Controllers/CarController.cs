@@ -169,11 +169,18 @@ namespace RentACar.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.FindAsync(id);
+            var car = await _context.Cars.Include(c => c.Category).FirstOrDefaultAsync(car => car.Id == id);
+
             if (car == null)
             {
                 return NotFound();
             }
+
+            if (car.IsRented)
+            {
+                return NotFound();
+            }
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", car.CategoryId);
             return View(car);
         }
@@ -214,8 +221,8 @@ namespace RentACar.Controllers
             return View(car);
         }
 
-        // GET: Car/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
             if (id == null || _context.Cars == null)
             {
@@ -224,30 +231,20 @@ namespace RentACar.Controllers
 
             var car = await _context.Cars
                 .Include(c => c.Category)
+                .Include(i => i.Images)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (car == null)
             {
                 return NotFound();
             }
 
-            return View(car);
-        }
-
-        // POST: Car/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Cars == null)
+            if (car.IsRented)
             {
-                return Problem("Entity set 'ApplicationDbContext.Cars'  is null.");
-            }
-            var car = await _context.Cars.FindAsync(id);
-            if (car != null)
-            {
-                _context.Cars.Remove(car);
+                return NotFound();
             }
 
+            _context.Remove(car);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
