@@ -23,7 +23,7 @@ namespace RentACar.Models
         public int? Rating { get; set; }
 
         [Required]
-        public float DailyPrice { get; set; }
+        public decimal DailyPrice { get; set; }
 
         public string Description { get; set; }
 

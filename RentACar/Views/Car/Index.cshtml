@@ -39,7 +39,13 @@
                             <p class="price ml-auto">@car.DailyPrice<span>/day</span></p>
                         </div>
                         <p class="d-flex mb-0 d-block">
-                            <a asp-area="" asp-controller="Car" asp-action="RentACar" asp-route-id="@car.Id" class="btn btn-primary py-2 mr-1">Rent</a> 
+                            @if (!car.IsRented)
+                            {
+                                <a asp-area="" asp-controller="Car" asp-action="RentACar" asp-route-id="@car.Id" class="btn btn-primary py-2 mr-1">Rent</a>
+
+                            }else{
+                                <a asp-area="" asp-controller="Car" asp-action="ReturnACar" asp-route-id="@car.Id" class="btn btn-primary py-2 mr-1">Return</a>
+                            }
                             <a asp-area="" asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-secondary py-2 ml-1">Details</a>
                         </p>
                     </div>

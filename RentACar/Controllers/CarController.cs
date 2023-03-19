@@ -71,6 +71,7 @@ namespace RentACar.Controllers
             if (ModelState.IsValid)
             {
                 carToRent.IsRented = true;
+                car.FinalPrice = (car.ReturnedDate - car.RentedDate).Days * carToRent.DailyPrice;
                 _context.Add(car);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -78,6 +79,20 @@ namespace RentACar.Controllers
 
             ViewData["Users"] = new SelectList(_context.Users, "Id", "UserName");
             ViewData["Locations"] = new SelectList(_context.Locations, "Id", "Name");
+            return View();
+        }
+
+        public async Task<IActionResult> ReturnACar(int id)
+        {
+            var car = await _context.Cars.FindAsync(id);
+
+            if (ModelState.IsValid)
+            {
+                car.IsRented = false;
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
             return View();
         }
 

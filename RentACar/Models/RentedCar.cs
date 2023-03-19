@@ -20,10 +20,12 @@ namespace RentACar.Models
         public int LocationReturnedId { get; set; }
 
         [Required]
-        public DateTime RentedDate { get; set; } = DateTime.Now;
+        public DateTime RentedDate { get; set; }
 
         [Required]
         public DateTime ReturnedDate { get ; set; }
+
+        public decimal FinalPrice { get; set; }
 
         [ForeignKey("CarId")]
         public Car? Car { get; set; }
