@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Create";
+}
+
+<section class="vh-100 bg-image" style="background-image: url('../../images/renault_austral.jpg'); background-size: cover">
+    <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="card" style="border-radius: 15px;padding: 20px">
+                    <div class="card-body p-5">
+                        <h2 class="text-uppercase text-center">Employee Links</h2>
+
+                        <ul class="navbar-nav ml-auto mt-5" id="nav" style="display: flex; flex-direction: row; justify-content:center; gap:50px">
+                            <li class="nav-item"><a asp-area="" asp-controller="Car" asp-action="Create" class="btn btn-primary py-2 ml-1" style="width: 130px">Add A Car</a></li>
+                            <li class="nav-item"><a asp-area="" asp-controller="Category" asp-action="Create" class="btn btn-primary py-2 ml-1" style="width: 150px">Add A Category</a></li>
+                            <li class="nav-item"><a asp-area="" asp-controller="Location" asp-action="Create" class="btn btn-primary py-2 ml-1">Add a Location</a></li>
+                            <li class="nav-item"><a asp-area="" asp-controller="Category" asp-action="Index" class="btn btn-primary py-2 ml-1">Categories</a></li>
+                            <li class="nav-item"><a asp-area="" asp-controller="Location" asp-action="Index" class="btn btn-primary py-2 ml-1">Locations</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

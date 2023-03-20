@@ -49,11 +49,10 @@
                     <li class="nav-item active"><a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link">Home</a></li>
                     <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="About" class="nav-link">About</a></li>
                     <li class="nav-item"><a asp-area="" asp-controller="Car" asp-action="Index" class="nav-link">Cars</a></li>
-                    <li class="nav-item"><a asp-area="" asp-controller="Category" asp-action="Index" class="nav-link">Categories</a></li>
+                    <li class="nav-item"><a asp-area="" asp-controller="Home" asp-action="Panel" class="nav-link">Employee Links</a></li>
                     @*@if (User.IsInRole("Employee"))
                     {*@
-                        <li class="nav-item"><a asp-area="" asp-controller="Car" asp-action="Create" class="nav-link">Add A Car</a></li>
-                        <li class="nav-item"><a asp-area="" asp-controller="Category" asp-action="Create" class="nav-link">Add A Category</a></li>
+                        
                     @*}*@
                     <partial name="_LoginPartial"></partial>
                 </ul>

@@ -121,26 +121,6 @@ namespace RentACar.Controllers
         // GET: Location/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Locations == null)
-            {
-                return NotFound();
-            }
-
-            var location = await _context.Locations
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (location == null)
-            {
-                return NotFound();
-            }
-
-            return View(location);
-        }
-
-        // POST: Location/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
             if (_context.Locations == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Locations'  is null.");
@@ -150,7 +130,7 @@ namespace RentACar.Controllers
             {
                 _context.Locations.Remove(location);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
