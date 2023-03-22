@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RentACar.Data;
@@ -21,10 +16,62 @@ namespace RentACar.Controllers
         }
 
         // GET: Car
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchValue, int? categoryId, string? priceRange, string? yearRange)
         {
-            var applicationDbContext = _context.Cars.Include(c => c.Category).Include(i => i.Images);
-            return View(await applicationDbContext.ToListAsync());
+            var cars = _context.Cars.Include(c => c.Category).Include(i => i.Images).ToList();
+            
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                cars = cars
+                    .Where(x => x.Description.ToLower().Contains(searchValue.ToLower())
+                    || x.Brand.ToLower().Contains(searchValue.ToLower())
+                    || x.Model.ToLower().Contains(searchValue.ToLower()))
+                    .ToList();
+            }
+
+            if (categoryId != null)
+            {
+                cars = cars.Where(x => x.CategoryId == categoryId).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(priceRange))
+            {
+                string startPriceString = priceRange.ToString().Split("-")[0];
+                string endPriceString = priceRange.ToString().Split("-")[1];
+
+                if (endPriceString == "+")
+                {
+                    cars = cars.Where(x => x.DailyPrice >= 50000).ToList();
+                }
+                else
+                {
+                    int startPrice = int.Parse(startPriceString);
+                    int endPrice = int.Parse(endPriceString);
+
+                    cars = cars.Where(x => x.DailyPrice >= startPrice && x.DailyPrice <= endPrice).ToList();
+                }
+            }
+
+            if (!string.IsNullOrEmpty(yearRange))
+            {
+                string startYearString = yearRange.ToString().Split("-")[0];
+                string endYearString = yearRange.ToString().Split("-")[1];
+
+                if (endYearString == "+")
+                {
+                    cars = cars.Where(x => x.ManufactureYear >= 2010).ToList();
+                }
+                else
+                {
+                    int startYear= int.Parse(startYearString);
+                    int endYear = int.Parse(endYearString);
+
+                    cars = cars.Where(x => x.ManufactureYear >= startYear && x.ManufactureYear <= endYear).ToList();
+                }
+            }
+
+            ViewData["Categories"] = new SelectList(_context.Categories.ToList(), "Id", "Name");
+            return View(cars);
         }
 
         // GET: Car/Details/5

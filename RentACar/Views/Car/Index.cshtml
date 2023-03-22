@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
             <div class="col-md-9 ftco-animate pb-5">
-                <p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Cars <i class="ion-ios-arrow-forward"></i></span></p>
+                <p class="breadcrumbs"><span class="mr-2"><a asp-controller="Home" asp-action="Index">Home <i class="ion-ios-arrow-forward"></i></a></span> <span>Cars <i class="ion-ios-arrow-forward"></i></span></p>
                 <h1 class="mb-3 bread">Choose Your Car</h1>
             </div>
         </div>
@@ -18,6 +18,43 @@
 
 
 <section class="ftco-section bg-light">
+    <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" method="get">
+        <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
+            <input type="text" name="searchValue" class="form-control" placeholder="Brand, Model or Description" style="width:20%; display:inline">
+            <input type="submit" value="Search" class="btn btn-secondary">
+        </div>
+    </form>
+    <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" method="get">
+        <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
+            <select name="categoryId" asp-items="@ViewBag.Categories" style="width: 10%; border-color: gray"></select>
+            <input type="submit" value="Search" class="btn btn-secondary">
+        </div>
+    </form>
+    <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" method="get">
+        <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
+            <select name="yearRange" style="width: 10%">
+                <option value="1900-1930">
+                    1900-1930
+                </option>
+                <option value="1930-1960">
+                    1930-1960
+                </option>
+                <option value="1960-1980">
+                    1960-1980
+                </option>
+                <option value="1980-2000">
+                    1980-2000
+                </option>
+                <option value="2000-2010">
+                    2000-2010
+                </option>
+                <option value="2010+">
+                    2010+
+                </option>
+            </select>
+            <input type="submit" value="Search" class="btn btn-secondary">
+        </div>
+    </form>
     <div class="container">
         <div class="row">
             @foreach (var car in Model)
