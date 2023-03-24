@@ -26,13 +26,18 @@
     </form>
     <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" method="get">
         <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
-            <select name="categoryId" asp-items="@ViewBag.Categories" style="width: 10%; border-color: gray"></select>
+            <select name="categoryId" asp-items="@ViewBag.Categories" style="width: 10%; border-color: gray">
+                <option value="">All</option>
+            </select>
             <input type="submit" value="Search" class="btn btn-secondary">
         </div>
     </form>
     <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" method="get">
         <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
             <select name="yearRange" style="width: 10%">
+                <option value="">
+                    All
+                </option>
                 <option value="1900-1930">
                     1900-1930
                 </option>
@@ -48,7 +53,7 @@
                 <option value="2000-2010">
                     2000-2010
                 </option>
-                <option value="2010+">
+                <option value="2010-+">
                     2010+
                 </option>
             </select>
@@ -65,7 +70,7 @@
 
                 string imgDataURL = string.Format("data:image/jpg;base64,{0}", imreBase64Data);
 
-                <div class="col-md-4">
+                <div class="col-md-4 mb-5">
                     <div class="car-wrap rounded ftco-animate">
                         <img class="img rounded d-flex align-items-end" src=@imgDataURL alt="@car.Brand @car.Model">
                     </div>

@@ -225,7 +225,7 @@ namespace RentACar.Controllers
 
             if (car.IsRented)
             {
-                return NotFound();
+                return RedirectToAction("Rented", "ErrorController");
             }
 
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", car.CategoryId);
