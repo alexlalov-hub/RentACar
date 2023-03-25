@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RentACar.Data;
 using RentACar.Models;
 
 namespace RentACar.Controllers
 {
+    [Authorize(Roles = "Employee")]
     public class LocationController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -121,10 +118,23 @@ namespace RentACar.Controllers
         // GET: Location/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
             if (_context.Locations == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Locations'  is null.");
             }
+
+            var carsWithLocation = _context.RentedCars.Where(c => c.LocationReturnedId == id).ToList();
+
+            if (carsWithLocation.Any())
+            {
+                return RedirectToAction("Rented", "Error");
+            }
+
             var location = await _context.Locations.FindAsync(id);
             if (location != null)
             {

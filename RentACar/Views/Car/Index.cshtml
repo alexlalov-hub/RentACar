@@ -71,28 +71,30 @@
                 string imgDataURL = string.Format("data:image/jpg;base64,{0}", imreBase64Data);
 
                 <div class="col-md-4 mb-5">
-                    <div class="car-wrap rounded ftco-animate">
-                        <img class="img rounded d-flex align-items-end" src=@imgDataURL alt="@car.Brand @car.Model">
-                    </div>
+                    <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">
+                        <div class="car-wrap rounded ftco-animate">
+                            <img class="img rounded d-flex align-items-end" src=@imgDataURL alt="@car.Brand @car.Model">
+                        </div>
+                    </a>
+                    
                     <div class="text">
-                        <h2 class="mb-0"><a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">@car.Model</a></h2>
+                        <h2 class="mb-0"><a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">@car.Model @if (car.IsRented) { <span>Rented</span> }</a></h2>
                         <div class="d-flex mb-3">
                             <span class="cat">@car.Brand</span>
                             <p class="price ml-auto">@car.DailyPrice<span>/day</span></p>
                         </div>
                         <p class="d-flex mb-0 d-block justify-content-center">
-                            <a asp-area="" asp-controller="Car" asp-action="Details" asp-route-id="@car.Id" class="btn btn-secondary py-2 ml-1">Details</a>
                             @if (User.IsInRole("Employee"))
                             {
                                 @if (!car.IsRented)
                                 {
                                     <a asp-area="" asp-controller="Car" asp-action="RentACar" asp-route-id="@car.Id" class="btn btn-primary py-2">Rent</a>
-
-                                }
+                                }   
                                 else
                                 {
                                     <a asp-area="" asp-controller="Car" asp-action="ReturnACar" asp-route-id="@car.Id" class="btn btn-primary py-2">Return</a>
                                 }
+
                                 <a asp-area="" asp-controller="Car" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning py-2 ml-1">Edit</a>
                                 <a asp-area="" asp-controller="Car" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger py-2 ml-1">Delete</a>
                             }

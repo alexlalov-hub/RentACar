@@ -109,16 +109,25 @@ namespace RentACar.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RentACar([FromForm] RentedCar car)
+        public async Task<IActionResult> RentACar(int? id, [FromForm] RentedCar car)
         {
-            car.CarId = int.Parse(Request.RouteValues["id"].ToString());
+            if(id == null)
+            {
+                return NotFound();
+            }
 
-            var carToRent = await _context.Cars.FindAsync(car.CarId);
+            var carToRent = await _context.Cars.FindAsync(id);
+
+            if (carToRent == null)
+            {
+                return NotFound();
+            }    
 
             if (ModelState.IsValid)
             {
                 carToRent.IsRented = true;
                 car.FinalPrice = (car.ReturnedDate - car.RentedDate).Days * carToRent.DailyPrice;
+                car.CarId = carToRent.Id;
                 _context.Add(car);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -129,18 +138,34 @@ namespace RentACar.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ReturnACar(int id)
+        public IActionResult ReturnACar(int? id)
         {
-            var car = await _context.Cars.FindAsync(id);
+            if(id == null)
+            {
+                return NotFound();
+            }
 
-            if (ModelState.IsValid)
+            var car = _context.Cars.Find(id);
+
+            if(car == null)
+            {
+                return NotFound();
+            }
+
+            var rentedCar = _context.RentedCars.Where(c => c.CarId == id).FirstOrDefault();
+
+            if(rentedCar == null)
+            {
+                return NotFound();
+            }
+            else
             {
                 car.IsRented = false;
-                await _context.SaveChangesAsync();
+                _context.RentedCars.Remove(rentedCar);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View();
         }
 
         [HttpGet]
