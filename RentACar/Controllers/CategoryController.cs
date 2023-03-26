@@ -56,13 +56,13 @@ namespace RentACar.Controllers
         {
             if (id == null || _context.Categories == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             var category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             return View(category);
         }
@@ -75,7 +75,7 @@ namespace RentACar.Controllers
         {
             if (id != category.Id)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             
@@ -91,7 +91,7 @@ namespace RentACar.Controllers
                 {
                     if (!CategoryExists(category.Id))
                     {
-                        return NotFound();
+                        return RedirectToAction("NotFound", "Error");
                     }
                     else
                     {
@@ -108,7 +108,7 @@ namespace RentACar.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             if (_context.Categories == null)

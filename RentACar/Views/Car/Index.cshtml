@@ -61,47 +61,61 @@
         </div>
     </form>
     <div class="container">
-        <div class="row">
-            @foreach (var car in Model)
+        <div class="row justify-content-center">
+            @if (Model.Any())
             {
-                var image = car.Images.Last();
+                @foreach (var car in Model)
+                {
+                    var image = car.Images.Last();
 
-                string imreBase64Data = Convert.ToBase64String(image.Bytes);
+                    string imreBase64Data = Convert.ToBase64String(image.Bytes);
 
-                string imgDataURL = string.Format("data:image/jpg;base64,{0}", imreBase64Data);
+                    string imgDataURL = string.Format("data:image/jpg;base64,{0}", imreBase64Data);
 
-                <div class="col-md-4 mb-5">
-                    <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">
-                        <div class="car-wrap rounded ftco-animate">
-                            <img class="img rounded d-flex align-items-end" src=@imgDataURL alt="@car.Brand @car.Model">
-                        </div>
-                    </a>
-                    
-                    <div class="text">
-                        <h2 class="mb-0"><a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">@car.Model @if (car.IsRented) { <span>Rented</span> }</a></h2>
-                        <div class="d-flex mb-3">
-                            <span class="cat">@car.Brand</span>
-                            <p class="price ml-auto">@car.DailyPrice<span>/day</span></p>
-                        </div>
-                        <p class="d-flex mb-0 d-block justify-content-center">
-                            @if (User.IsInRole("Employee"))
-                            {
-                                @if (!car.IsRented)
+                    <div class="col-md-4 mb-5">
+                        <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">
+                            <div class="car-wrap rounded ftco-animate">
+                                <img class="img rounded d-flex align-items-end" src=@imgDataURL alt="@car.Brand @car.Model">
+                            </div>
+                        </a>
+
+                        <div class="text">
+                            <h2 class="mb-0">
+                                <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">
+                                    @car.Model @if (car.IsRented)
+                                    {
+                                        <span>Rented</span>
+                                    }
+                                </a>
+                            </h2>
+                            <div class="d-flex mb-3">
+                                <span class="cat">@car.Brand</span>
+                                <p class="price ml-auto">@car.DailyPrice<span>/day</span></p>
+                            </div>
+                            <p class="d-flex mb-0 d-block justify-content-center">
+                                @if (User.IsInRole("Employee"))
                                 {
-                                    <a asp-area="" asp-controller="Car" asp-action="RentACar" asp-route-id="@car.Id" class="btn btn-primary py-2">Rent</a>
-                                }   
-                                else
-                                {
-                                    <a asp-area="" asp-controller="Car" asp-action="ReturnACar" asp-route-id="@car.Id" class="btn btn-primary py-2">Return</a>
+                                    @if (!car.IsRented)
+                                    {
+                                        <a asp-area="" asp-controller="Car" asp-action="RentACar" asp-route-id="@car.Id" class="btn btn-primary py-2">Rent</a>
+                                        <a asp-area="" asp-controller="Car" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning py-2 ml-1">Edit</a>
+                                        <a asp-area="" asp-controller="Car" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger py-2 ml-1">Delete</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-area="" asp-controller="Car" asp-action="ReturnACar" asp-route-id="@car.Id" class="btn btn-primary py-2">Return</a>
+                                    }
                                 }
-
-                                <a asp-area="" asp-controller="Car" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning py-2 ml-1">Edit</a>
-                                <a asp-area="" asp-controller="Car" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger py-2 ml-1">Delete</a>
-                            }
-                        </p>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                }
             }
+            else
+            {
+                <p class="d-inline-flex justify-content-center">No records found!</p>
+            }
+
 
         </div>
         @*<div class="row mt-5">

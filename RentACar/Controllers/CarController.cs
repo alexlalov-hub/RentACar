@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RentACar.Data;
 using RentACar.Models;
+using System.Drawing.Drawing2D;
 
 namespace RentACar.Controllers
 {
@@ -19,7 +20,7 @@ namespace RentACar.Controllers
         public async Task<IActionResult> Index(string searchValue, int? categoryId, string? priceRange, string? yearRange)
         {
             var cars = _context.Cars.Include(c => c.Category).Include(i => i.Images).ToList();
-            
+
             if (!string.IsNullOrEmpty(searchValue))
             {
                 cars = cars
@@ -63,7 +64,7 @@ namespace RentACar.Controllers
                 }
                 else
                 {
-                    int startYear= int.Parse(startYearString);
+                    int startYear = int.Parse(startYearString);
                     int endYear = int.Parse(endYearString);
 
                     cars = cars.Where(x => x.ManufactureYear >= startYear && x.ManufactureYear <= endYear).ToList();
@@ -79,7 +80,7 @@ namespace RentACar.Controllers
         {
             if (id == null || _context.Cars == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             var car = await _context.Cars
@@ -88,7 +89,7 @@ namespace RentACar.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (car == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             return View(car);
@@ -99,7 +100,7 @@ namespace RentACar.Controllers
         {
             if (id == null || _context.Cars == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
 
@@ -111,17 +112,17 @@ namespace RentACar.Controllers
         [HttpPost]
         public async Task<IActionResult> RentACar(int? id, [FromForm] RentedCar car)
         {
-            if(id == null)
+            if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             var carToRent = await _context.Cars.FindAsync(id);
 
             if (carToRent == null)
             {
-                return NotFound();
-            }    
+                return RedirectToAction("NotFound", "Error");
+            }
 
             if (ModelState.IsValid)
             {
@@ -140,23 +141,23 @@ namespace RentACar.Controllers
 
         public IActionResult ReturnACar(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             var car = _context.Cars.Find(id);
 
-            if(car == null)
+            if (car == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             var rentedCar = _context.RentedCars.Where(c => c.CarId == id).FirstOrDefault();
 
-            if(rentedCar == null)
+            if (rentedCar == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             else
             {
@@ -201,13 +202,13 @@ namespace RentACar.Controllers
                             using var memoryStream = new MemoryStream();
                             await formFile.CopyToAsync(memoryStream);
 
-                                var newphoto = new Image()
-                                {
-                                    Bytes = memoryStream.ToArray(),
-                                    FileExtension = Path.GetExtension(formFile.FileName),
-                                    Size = formFile.Length
-                                };
-                                images.Add(newphoto);
+                            var newphoto = new Image()
+                            {
+                                Bytes = memoryStream.ToArray(),
+                                FileExtension = Path.GetExtension(formFile.FileName),
+                                Size = formFile.Length
+                            };
+                            images.Add(newphoto);
                         }
                     }
                 }
@@ -238,14 +239,14 @@ namespace RentACar.Controllers
         {
             if (id == null || _context.Cars == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             var car = await _context.Cars.Include(c => c.Category).FirstOrDefaultAsync(car => car.Id == id);
 
             if (car == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             if (car.IsRented)
@@ -253,8 +254,19 @@ namespace RentACar.Controllers
                 return RedirectToAction("Rented", "ErrorController");
             }
 
+            var carToEdit = new CarEditViewModel()
+            {
+                Id = car.Id,
+                Brand = car.Brand,
+                Model = car.Model,
+                ManufactureYear = car.ManufactureYear,
+                DailyPrice = car.DailyPrice,
+                Description = car.Description,
+                CategoryId = car.CategoryId,
+            };
+
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", car.CategoryId);
-            return View(car);
+            return View(carToEdit);
         }
 
         // POST: Car/Edit/5
@@ -262,25 +274,40 @@ namespace RentACar.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Brand,Model,ManufactureYear,Rating,DailyPrice,CategoryId")] Car car)
+        public async Task<IActionResult> Edit(int id, CarEditViewModel car)
         {
             if (id != car.Id)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
+
+            var carToEdit = await _context.Cars.FindAsync(id);
+
+            if (carToEdit == null)
+            {
+                return RedirectToAction("NotFound", "Error");
+            }
+
+            carToEdit.Id = car.Id;
+            carToEdit.Brand = car.Brand;
+            carToEdit.Model = car.Model;
+            carToEdit.ManufactureYear = car.ManufactureYear;
+            carToEdit.DailyPrice = car.DailyPrice;
+            carToEdit.Description = car.Description;
+            carToEdit.CategoryId = car.CategoryId;
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(car);
+                    _context.Update(carToEdit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!CarExists(car.Id))
                     {
-                        return NotFound();
+                        return RedirectToAction("NotFound", "Error");
                     }
                     else
                     {
@@ -298,22 +325,21 @@ namespace RentACar.Controllers
         {
             if (id == null || _context.Cars == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             var car = await _context.Cars
-                .Include(c => c.Category)
                 .Include(i => i.Images)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (car == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             if (car.IsRented)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             _context.Remove(car);

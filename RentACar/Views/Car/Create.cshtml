@@ -8,7 +8,6 @@
     <div class="mask d-flex align-items-center h-100 gradient-custom-3">
         <div class="container h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                     <div class="card" style="border-radius: 15px;">
                         <div class="card-body p-5">
                             <h2 class="text-uppercase text-center mb-5">Add a Car</h2>
@@ -29,6 +28,11 @@
                                     <label asp-for="ManufactureYear" class="form-label">Manufacture Year</label>
                                     <input asp-for="ManufactureYear" type="text" class="form-control form-control-lg" placeholder="Manufacture Year" />
                                     <span asp-validation-for="ManufactureYear" class="text-danger"></span>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label asp-for="Description" class="form-label"></label>
+                                    <textarea asp-for="Description" type="text" class="form-control form-control-lg" placeholder="Description"></textarea> 
+                                    <span asp-validation-for="Description" class="text-danger"></span>
                                 </div>
                                 <div class="form-outline mb-4">
                                     <label asp-for="DailyPrice" class="form-label">Daily Price</label>

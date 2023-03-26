@@ -8,5 +8,10 @@ namespace RentACar.Controllers
         {
             return View();
         }
+
+        public IActionResult NotFound()
+        {
+            return View();
+        }
     }
 }

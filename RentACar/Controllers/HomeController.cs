@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RentACar.Data;
 using RentACar.Models;
 using System.Diagnostics;
 
@@ -8,16 +9,17 @@ namespace RentACar.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var firstCars = _context.Cars.TakeLast(3);
+            return View(firstCars);
         }
 
         public IActionResult Panel()

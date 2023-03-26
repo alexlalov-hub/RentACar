@@ -29,14 +29,14 @@ namespace RentACar.Controllers
         {
             if (id == null || _context.Locations == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             var location = await _context.Locations
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (location == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             return View(location);
@@ -69,13 +69,13 @@ namespace RentACar.Controllers
         {
             if (id == null || _context.Locations == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             var location = await _context.Locations.FindAsync(id);
             if (location == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
             return View(location);
         }
@@ -89,7 +89,7 @@ namespace RentACar.Controllers
         {
             if (id != location.Id)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             if (ModelState.IsValid)
@@ -103,7 +103,7 @@ namespace RentACar.Controllers
                 {
                     if (!LocationExists(location.Id))
                     {
-                        return NotFound();
+                        return RedirectToAction("NotFound", "Error");
                     }
                     else
                     {
@@ -120,7 +120,7 @@ namespace RentACar.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFound", "Error");
             }
 
             if (_context.Locations == null)
