@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<RentACar.Models.Car>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -71,48 +73,91 @@
         <div class="row">
             <div class="col-3">
                 <div class="d-flex" style="gap: 100px">
-                    <div class="item">
-                        <div class="car-wrap rounded ftco-animate" style="width: 350px">
-                            <div class="img rounded d-flex align-items-end" style="background-image: url(images/car-3.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Cheverolet</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                    @if (Model.Any())
+                    {
+                        @foreach (var car in Model)
+                        {
+                            var image = car.Images?.Last();
+                            string imgDataURL = "";
+
+                            if (image != null)
+                            {
+                                string imreBase64Data = Convert.ToBase64String(image.Bytes);
+                                imgDataURL = string.Format("data:image/jpg;base64,{0}", imreBase64Data);
+                            }
+
+                            <div class="item">
+                                <div class="car-wrap rounded ftco-animate" style="width: 350px">
+                                    <a asp-area="" asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">
+                                        <div class="img rounded d-flex align-items-end" style="background-image: url(@imgDataURL);">
+                                        </div>
+                                    </a>
+
+                                    <div class="text">
+                                        <h2 class="mb-0">
+                                            <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">
+                                                @car.Model @if (car.IsRented)
+                                                {
+                                                    <span style="color: red">(Rented)</span>
+                                                }
+                                            </a>
+                                        </h2>
+                                        <div class="d-flex mb-3">
+                                            <span class="cat">@car.Brand</span>
+                                            <p class="price ml-auto">@car.DailyPrice<span>/day</span></p>
+                                        </div>
+                                        <p class="d-flex mb-0 d-block justify-content-center">
+                                            @if (User.IsInRole("Employee"))
+                                            {
+                                                @if (!car.IsRented)
+                                                {
+                                                    <a asp-area="" asp-controller="Car" asp-action="RentACar" asp-route-id="@car.Id" class="btn btn-primary py-2">Rent</a>
+                                                    <a asp-area="" asp-controller="Car" asp-action="Edit" asp-route-id="@car.Id" class="btn btn-warning py-2 ml-1">Edit</a>
+                                                    <a asp-area="" asp-controller="Car" asp-action="Delete" asp-route-id="@car.Id" class="btn btn-danger py-2 ml-1">Delete</a>
+                                                }
+                                                else
+                                                {
+                                                    <a asp-area="" asp-controller="Car" asp-action="ReturnACar" asp-route-id="@car.Id" class="btn btn-primary py-2">Return</a>
+                                                }
+                                            }
+                                        </p>
+                                    </div>
                                 </div>
-                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
                             </div>
-                        </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="d-inline-flex justify-content-center">No records found!</p>
+                    }
+                    @*<div class="item">
+                    <div class="car-wrap rounded ftco-animate" style="width: 350px">
+                    <div class="img rounded d-flex align-items-end" style="background-image: url(images/car-4.jpg);">
+                    </div>
+                    <div class="text">
+                    <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
+                    <div class="d-flex mb-3">
+                    <span class="cat">Cheverolet</span>
+                    <p class="price ml-auto">$500 <span>/day</span></p>
+                    </div>
+                    <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
+                    </div>
+                    </div>
                     </div>
                     <div class="item">
-                        <div class="car-wrap rounded ftco-animate" style="width: 350px">
-                            <div class="img rounded d-flex align-items-end" style="background-image: url(images/car-4.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Cheverolet</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
-                                </div>
-                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
-                            </div>
-                        </div>
+                    <div class="car-wrap rounded ftco-animate" style="width: 350px">
+                    <div class="img rounded d-flex align-items-end" style="background-image: url(images/car-4.jpg);">
                     </div>
-                    <div class="item">
-                        <div class="car-wrap rounded ftco-animate" style="width: 350px">
-                            <div class="img rounded d-flex align-items-end" style="background-image: url(images/car-4.jpg);">
-                            </div>
-                            <div class="text">
-                                <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
-                                <div class="d-flex mb-3">
-                                    <span class="cat">Cheverolet</span>
-                                    <p class="price ml-auto">$500 <span>/day</span></p>
-                                </div>
-                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
-                            </div>
-                        </div>
+                    <div class="text">
+                    <h2 class="mb-0"><a href="#">Mercedes Grand Sedan</a></h2>
+                    <div class="d-flex mb-3">
+                    <span class="cat">Cheverolet</span>
+                    <p class="price ml-auto">$500 <span>/day</span></p>
                     </div>
+                    <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a href="#" class="btn btn-secondary py-2 ml-1">Details</a></p>
+                    </div>
+                    </div>
+                    </div>*@
                 </div>
             </div>
         </div>

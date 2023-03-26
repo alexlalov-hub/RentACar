@@ -24,42 +24,74 @@
             <input type="submit" value="Search" class="btn btn-secondary">
         </div>
     </form>
-    <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" method="get">
-        <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
-            <select name="categoryId" asp-items="@ViewBag.Categories" style="width: 10%; border-color: gray">
-                <option value="">All</option>
-            </select>
-            <input type="submit" value="Search" class="btn btn-secondary">
-        </div>
-    </form>
-    <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" method="get">
-        <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
-            <select name="yearRange" style="width: 10%">
-                <option value="">
-                    All
-                </option>
-                <option value="1900-1930">
-                    1900-1930
-                </option>
-                <option value="1930-1960">
-                    1930-1960
-                </option>
-                <option value="1960-1980">
-                    1960-1980
-                </option>
-                <option value="1980-2000">
-                    1980-2000
-                </option>
-                <option value="2000-2010">
-                    2000-2010
-                </option>
-                <option value="2010-+">
-                    2010+
-                </option>
-            </select>
-            <input type="submit" value="Search" class="btn btn-secondary">
-        </div>
-    </form>
+    <div class="d-flex justify-content-center" style="width: 100%">
+        
+        <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" style="display: inline; width: 25%" method="get">
+            <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
+                Category:
+                <select name="categoryId" asp-items="@ViewBag.Categories" style="width: 50%; border-color: gray">
+                    <option value="">All</option>
+                </select>
+                <input type="submit" value="Search" class="btn btn-secondary">
+            </div>
+        </form>
+        
+        <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" style="display:inline; width: 25%" method="get">
+            <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
+                Year:
+                <select name="yearRange" style="width: 50%">
+                    <option value="">
+                        All
+                    </option>
+                    <option value="1900-1930">
+                        1900-1930
+                    </option>
+                    <option value="1930-1960">
+                        1930-1960
+                    </option>
+                    <option value="1960-1980">
+                        1960-1980
+                    </option>
+                    <option value="1980-2000">
+                        1980-2000
+                    </option>
+                    <option value="2000-2010">
+                        2000-2010
+                    </option>
+                    <option value="2010-+">
+                        2010+
+                    </option>
+                </select>
+                <input type="submit" value="Search" class="btn btn-secondary">
+            </div>
+        </form>
+
+        <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" style="display: inline; width: 25%" method="get">
+            <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
+                Sort By:
+                <select name="sort" style="width: 50%">
+                    <option value="">
+                        All
+                    </option>
+                    <option value="Year">
+                        Year
+                    </option>
+                    <option value="Year Descending">
+                        Year Descending
+                    </option>
+                    <option value="Daily Price">
+                        Daily Price
+                    </option>
+                    <option value="Daily Price Descending">
+                        Daily Price Descending
+                    </option>
+                    
+                </select>
+                <input type="submit" value="Search" class="btn btn-secondary">
+            </div>
+        </form>
+    </div>
+    
     <div class="container">
         <div class="row justify-content-center">
             @if (Model.Any())
@@ -73,9 +105,9 @@
                     string imgDataURL = string.Format("data:image/jpg;base64,{0}", imreBase64Data);
 
                     <div class="col-md-4 mb-5">
+                                <div class="car-wrap rounded ftco-animate" style="width: 350px">
                         <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">
-                            <div class="car-wrap rounded ftco-animate">
-                                <img class="img rounded d-flex align-items-end" src=@imgDataURL alt="@car.Brand @car.Model">
+                            <div class="img rounded d-flex align-items-end" style="background-image: url(@imgDataURL);">
                             </div>
                         </a>
 
@@ -84,7 +116,7 @@
                                 <a asp-controller="Car" asp-action="Details" asp-route-id="@car.Id">
                                     @car.Model @if (car.IsRented)
                                     {
-                                        <span>Rented</span>
+                                        <span style="color: red">(Rented)</span>
                                     }
                                 </a>
                             </h2>
@@ -107,6 +139,7 @@
                                     }
                                 }
                             </p>
+                            </div>
                         </div>
                     </div>
                 }

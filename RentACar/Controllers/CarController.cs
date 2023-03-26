@@ -17,7 +17,7 @@ namespace RentACar.Controllers
         }
 
         // GET: Car
-        public async Task<IActionResult> Index(string searchValue, int? categoryId, string? priceRange, string? yearRange)
+        public async Task<IActionResult> Index(string searchValue, int? categoryId, string? priceRange, string? yearRange, string? sort)
         {
             var cars = _context.Cars.Include(c => c.Category).Include(i => i.Images).ToList();
 
@@ -69,6 +69,18 @@ namespace RentACar.Controllers
 
                     cars = cars.Where(x => x.ManufactureYear >= startYear && x.ManufactureYear <= endYear).ToList();
                 }
+            }
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+                cars = sort switch
+                {
+                    "Year" => cars.OrderByDescending(car => car.ManufactureYear).ToList(),
+                    "Year Descending" => cars.OrderBy(car => car.ManufactureYear).ToList(),
+                    "Daily Price" => cars.OrderByDescending(car => car.ManufactureYear).ToList(),
+                    "Daily Price Descending" => cars.OrderBy(car => car.ManufactureYear).ToList(),
+                    _ => cars.OrderBy(car => car.Brand).ToList(),
+                };
             }
 
             ViewData["Categories"] = new SelectList(_context.Categories.ToList(), "Id", "Name");

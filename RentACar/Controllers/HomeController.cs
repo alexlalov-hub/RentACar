@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RentACar.Data;
 using RentACar.Models;
 using System.Diagnostics;
@@ -16,9 +17,9 @@ namespace RentACar.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var firstCars = _context.Cars.TakeLast(3);
+            var firstCars = await _context.Cars.Include(c =>c.Category).Include(i => i.Images).Take(3).ToListAsync();
             return View(firstCars);
         }
 
