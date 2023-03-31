@@ -26,6 +26,12 @@
                                 </div>
 
                                 <div class="form-outline mb-4">
+                                    <label asp-for="Input.Email" class="form-label">Email</label>
+                                    <input asp-for="Input.Email" type="text" class="form-control form-control-lg" placeholder="Email" />
+                                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-outline mb-4">
                                     <label asp-for="Input.FirstName" class="form-label">First Name</label>
                                     <input asp-for="Input.FirstName" type="text" class="form-control form-control-lg" placeholder="First Name" />
                                     <span asp-validation-for="Input.FirstName" class="text-danger"></span>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RentACar.Data;
@@ -10,10 +11,14 @@ namespace RentACar.Controllers
     public class CarController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public CarController(ApplicationDbContext context)
+        public CarController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // GET: Car
@@ -115,8 +120,9 @@ namespace RentACar.Controllers
                 return RedirectToAction("NotFound", "Error");
             }
 
+            var clients = _userManager.GetUsersInRoleAsync("Client").Result.ToList();
 
-            ViewData["Users"] = new SelectList(_context.Users, "Id", "UserName");
+            ViewData["Users"] = new SelectList(clients, "Id", "UserName");
             ViewData["Locations"] = new SelectList(_context.Locations, "Id", "Name");
             return View();
         }
@@ -127,6 +133,16 @@ namespace RentACar.Controllers
             if (id == null)
             {
                 return RedirectToAction("NotFound", "Error");
+            }
+
+            if(car.ReturnedDate < car.RentedDate)
+            {
+                ModelState.AddModelError("Returned Date", "The return date must not be before the begin date!");
+            }
+
+            if (car.RentedDate > car.ReturnedDate)
+            {
+                ModelState.AddModelError("Rented Date", "The begin date must not be before the return date!");
             }
 
             var carToRent = await _context.Cars.FindAsync(id);
