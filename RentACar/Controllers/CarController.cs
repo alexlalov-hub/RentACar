@@ -22,7 +22,7 @@ namespace RentACar.Controllers
         }
 
         // GET: Car
-        public async Task<IActionResult> Index(string searchValue, int? categoryId, string? priceRange, string? yearRange, string? sort)
+        public async Task<IActionResult> Index(string searchValue, int? categoryId, string? priceRange, string? yearRange, string? sort, int? pageNumber, int? pageSize)
         {
             var cars = _context.Cars.Include(c => c.Category).Include(i => i.Images).ToList();
 
@@ -89,7 +89,7 @@ namespace RentACar.Controllers
             }
 
             ViewData["Categories"] = new SelectList(_context.Categories.ToList(), "Id", "Name");
-            return View(cars);
+            return View(await PaginatedList<Car>.CreateAsync(cars.AsQueryable(), pageNumber ?? 1, pageSize ?? 5));
         }
 
         // GET: Car/Details/5
@@ -215,6 +215,7 @@ namespace RentACar.Controllers
                     Rating = null,
                     Brand = car.Brand,
                     Model = car.Model,
+                    Description = car.Description,
                     ManufactureYear = car.ManufactureYear,
                     DailyPrice = car.DailyPrice,
                     CategoryId = car.CategoryId,

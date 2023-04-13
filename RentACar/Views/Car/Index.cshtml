@@ -1,8 +1,56 @@
-﻿@model IEnumerable<RentACar.Models.Car>
+﻿@model PaginatedList<Car>
 
 @{
     ViewData["Title"] = "Index";
 }
+
+<style>
+    .dropbtn {
+        background-color: #007bff;
+        color: white;
+        padding: 6px;
+        padding-bottom: 3px;
+        border-top-left-radius: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropbtn:hover, .dropbtn:focus {
+        background-color: #007bff;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f1f1f1;
+        min-width: 160px;
+        overflow: auto;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+        .dropdown-content a {
+            color: black;
+            padding: 6px;
+            text-decoration: none;
+            display: block;
+        }
+
+    .dropdown a:hover {
+        background-color: #ddd;
+    }
+
+    .show {
+        display: block;
+    }
+</style>
 
 <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/18015-MC20BluInfinito-scaled-e1666008987698.jpg');" data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
@@ -19,6 +67,7 @@
 
 <section class="ftco-section bg-light">
     <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5" method="get">
+        <input name="pageSize" hidden value="@Model.PageSize" />
         <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
             <input type="text" name="searchValue" class="form-control" placeholder="Brand, Model or Description" style="width:20%; display:inline">
             <input type="submit" value="Search" class="btn btn-secondary">
@@ -27,6 +76,7 @@
     <div class="d-flex justify-content-center" style="width: 100%">
 
         <form asp-controller="Car" asp-action="Index" class="ftco-animate fadeInUp ftco-animated mb-xl-5 d-flex justify-content-center" style="width: 25%; flex-direction: column;" method="get">
+            <input name="pageSize" hidden value="@Model.PageSize" />
             <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
                 Category:
                 <select name="categoryId" asp-items="@ViewBag.Categories" style="width: 50%; border-color: gray">
@@ -145,25 +195,87 @@
             {
                 <p class="d-inline-flex justify-content-center">No records found!</p>
             }
-
-
         </div>
-        @*<div class="row mt-5">
-        <div class="col text-center">
-        <div class="block-27">
-        <ul>
-        <li><a href="#">&lt;</a></li>
-        <li class="active"><span>1</span></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-        <li><a href="#">&gt;</a></li>
+
+        @{
+            string prevActive = Model.HasPreviousPage ? "active" : "disabled";
+            string nextActive = Model.HasNextPage ? "active" : "disabled";
+        }
+
+       
+
+        <ul class="pagination justify-content-center">
+            <div class="dropdown">
+                <button onclick="myFunction()" class="dropbtn text-center; width: 60px; height: 30px; padding: 5px">Size</button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a asp-controller="Car" asp-action="Index"
+                       asp-route-pageSize="5"
+                       asp-route-searchValue="@Context.Request.Query["searchValue"]"
+                       asp-route-yearRange="@Context.Request.Query["yearRange"]"
+                       asp-route-categoryId="@Context.Request.Query["categoryId"]"
+                       asp-route-sort="@Context.Request.Query["sort"]">5</a>
+                    <a asp-controller="Car" asp-action="Index"
+                       asp-route-pageSize="10"
+                       asp-route-searchValue="@Context.Request.Query["searchValue"]"
+                       asp-route-yearRange="@Context.Request.Query["yearRange"]"
+                       asp-route-categoryId="@Context.Request.Query["categoryId"]"
+                       asp-route-sort="@Context.Request.Query["sort"]">10</a>
+                    <a asp-controller="Car" asp-action="Index"
+                       asp-route-pageSize="15"
+                       asp-route-searchValue="@Context.Request.Query["searchValue"]"
+                       asp-route-yearRange="@Context.Request.Query["yearRange"]"
+                       asp-route-categoryId="@Context.Request.Query["categoryId"]"
+                       asp-route-sort="@Context.Request.Query["sort"]">3</a>
+                </div>
+            </div>
+            <li class="page-item @prevActive">
+                <a asp-controller="Car" asp-action="Index"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-pageNumber="@(Model.PageNumber - 1)"
+                   asp-route-searchValue="@Context.Request.Query["searchValue"]"
+                   asp-route-yearRange="@Context.Request.Query["yearRange"]"
+                   asp-route-categoryId="@Context.Request.Query["categoryId"]"
+                   asp-route-sort="@Context.Request.Query["sort"]"
+                   class="page-link">
+                    Back
+                </a>
+            </li>
+            <li class="page-item @nextActive">
+                <a asp-controller="Car" asp-action="Index"
+                   asp-route-pageSize="@Model.PageSize"
+                   asp-route-pageNumber="@(Model.PageNumber + 1)"
+                   asp-route-searchValue="@Context.Request.Query["searchValue"]"
+                   asp-route-yearRange="@Context.Request.Query["yearRange"]"
+                   asp-route-categoryId="@Context.Request.Query["categoryId"]"
+                   asp-route-sort="@Context.Request.Query["sort"]"
+                   class="page-link">
+                    Next
+                </a>
+            </li>
         </ul>
-        </div>
-        </div>
-        </div>*@
     </div>
+
+    <script>
+        /* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+        function myFunction() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function (event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
 </section>
 
 

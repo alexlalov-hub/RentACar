@@ -1,3 +1,24 @@
-﻿/*button:hover {
-    opacity: 0.5;
-}*/
+﻿.myDrop {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 5px 10px;
+    max-width: 100%;
+    min-width: 100%;
+    vertical-align: middle;
+}
+
+.mydrop ul {
+    display: none;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    max-height: 250px;
+    overflow: auto;
+}
+
+.mydrop ul li {
+}
+
+.mydrop ul li:hover {
+    background: #ddd;
+}
