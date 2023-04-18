@@ -16,7 +16,6 @@ namespace RentACar.Controllers
             _context = context;
         }
 
-        // GET: Location
         public async Task<IActionResult> Index()
         {
               return _context.Locations != null ? 
@@ -24,7 +23,6 @@ namespace RentACar.Controllers
                           Problem("Entity set 'ApplicationDbContext.Locations'  is null.");
         }
 
-        // GET: Location/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Locations == null)
@@ -42,15 +40,11 @@ namespace RentACar.Controllers
             return View(location);
         }
 
-        // GET: Location/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Location/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Location location)
@@ -64,7 +58,6 @@ namespace RentACar.Controllers
             return View(location);
         }
 
-        // GET: Location/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Locations == null)
@@ -80,9 +73,6 @@ namespace RentACar.Controllers
             return View(location);
         }
 
-        // POST: Location/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Location location)
@@ -115,7 +105,6 @@ namespace RentACar.Controllers
             return View(location);
         }
 
-        // GET: Location/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

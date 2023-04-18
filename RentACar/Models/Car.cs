@@ -38,8 +38,6 @@ namespace RentACar.Models
 
         public ICollection<Image>? Images { get; set; }
 
-        //public ICollection<ApplicationUser>? UserThatRented { get; set; }
-
         [FromForm]
         [NotMapped]
         public IFormFileCollection Files { get; set; }

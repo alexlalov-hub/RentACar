@@ -92,7 +92,6 @@ namespace RentACar.Controllers
             return View(await PaginatedList<Car>.CreateAsync(cars.AsQueryable(), pageNumber ?? 1, pageSize ?? 5));
         }
 
-        // GET: Car/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Cars == null)
@@ -263,7 +262,6 @@ namespace RentACar.Controllers
             return imgDataURL;
         }
 
-        // GET: Car/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Cars == null)
@@ -298,9 +296,6 @@ namespace RentACar.Controllers
             return View(carToEdit);
         }
 
-        // POST: Car/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CarEditViewModel car)
