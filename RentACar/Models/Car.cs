@@ -27,7 +27,7 @@ namespace RentACar.Models
 
         public string Description { get; set; }
 
-        [Required]
+        [Required]      
         public bool IsRented { get; set; } = false;
 
         [Required]
