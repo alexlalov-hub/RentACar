@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RentACar.Models;
 
 namespace RentACar.Data
@@ -31,6 +32,8 @@ namespace RentACar.Data
 
         public static void Initialize(ApplicationDbContext context)
         {
+            context.Database.Migrate();
+
             if (context.Roles.Any() || context.Users.Any() || context.Cars.Any())
             {
                 return;
