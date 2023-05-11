@@ -131,6 +131,32 @@
                     </option>
                 </select>
             </div>
+            <div class="form-group" style="display: flex; justify-content:center; width:100%; gap: 30px">
+                Price range:
+                <select name="yearRange" style="width: 50%">
+                    <option value="">
+                        All
+                    </option>
+                    <option value="5000-10000">
+                        5000-10000
+                    </option>
+                    <option value="10000-20000">
+                        10000-20000
+                    </option>
+                    <option value="20000-30000">
+                        20000-30000
+                    </option>
+                    <option value="30000-40000">
+                        30000-40000
+                    </option>
+                    <option value="40000-50000">
+                        40000-50000
+                    </option>
+                    <option value="50000-+">
+                        50000       +
+                    </option>
+                </select>
+            </div>
 
             <input type="submit" value="Search" class="btn btn-secondary">
         </form>
@@ -212,18 +238,21 @@
                        asp-route-pageSize="5"
                        asp-route-searchValue="@Context.Request.Query["searchValue"]"
                        asp-route-yearRange="@Context.Request.Query["yearRange"]"
+                       asp-route-priceRange="@Context.Request.Query["priceRange"]"
                        asp-route-categoryId="@Context.Request.Query["categoryId"]"
                        asp-route-sort="@Context.Request.Query["sort"]">5</a>
                     <a asp-controller="Car" asp-action="Index"
                        asp-route-pageSize="10"
                        asp-route-searchValue="@Context.Request.Query["searchValue"]"
                        asp-route-yearRange="@Context.Request.Query["yearRange"]"
+                       asp-route-priceRange="@Context.Request.Query["priceRange"]"
                        asp-route-categoryId="@Context.Request.Query["categoryId"]"
                        asp-route-sort="@Context.Request.Query["sort"]">10</a>
                     <a asp-controller="Car" asp-action="Index"
                        asp-route-pageSize="15"
                        asp-route-searchValue="@Context.Request.Query["searchValue"]"
                        asp-route-yearRange="@Context.Request.Query["yearRange"]"
+                       asp-route-priceRange="@Context.Request.Query["priceRange"]"
                        asp-route-categoryId="@Context.Request.Query["categoryId"]"
                        asp-route-sort="@Context.Request.Query["sort"]">15</a>
                 </div>
@@ -234,6 +263,7 @@
                    asp-route-pageNumber="@(Model.PageNumber - 1)"
                    asp-route-searchValue="@Context.Request.Query["searchValue"]"
                    asp-route-yearRange="@Context.Request.Query["yearRange"]"
+                   asp-route-priceRange="@Context.Request.Query["priceRange"]"
                    asp-route-categoryId="@Context.Request.Query["categoryId"]"
                    asp-route-sort="@Context.Request.Query["sort"]"
                    class="page-link">
@@ -246,6 +276,7 @@
                    asp-route-pageNumber="@(Model.PageNumber + 1)"
                    asp-route-searchValue="@Context.Request.Query["searchValue"]"
                    asp-route-yearRange="@Context.Request.Query["yearRange"]"
+                   asp-route-priceRange="@Context.Request.Query["priceRange"]"
                    asp-route-categoryId="@Context.Request.Query["categoryId"]"
                    asp-route-sort="@Context.Request.Query["sort"]"
                    class="page-link">
