@@ -17,6 +17,7 @@ namespace RentACar.Controllers
             _context = context;
         }
 
+        //Метод за визуализиране на три най-скорошни автомобила в началната страница
         public async Task<IActionResult> Index()
         {
             var firstCars = await _context.Cars.Include(c =>c.Category).Include(i => i.Images).Take(3).ToListAsync();

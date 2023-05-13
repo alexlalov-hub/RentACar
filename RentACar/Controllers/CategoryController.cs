@@ -21,6 +21,8 @@ namespace RentACar.Controllers
             _context = context;
         }
 
+        //Главен метод за визуализиране на всички категории. В случай че в базата няма категория възниква проблем
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Index()
         {
               return _context.Categories != null ? 
@@ -28,15 +30,20 @@ namespace RentACar.Controllers
                           Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
         }
 
+        //Метод за визуализиране на форма за създаване на категория
+        [Authorize(Roles = "Employee")]
         public IActionResult Create()
         {
             return View();
         }
 
+        //Метод за създаване на категория
+        [Authorize(Roles = "Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
         {
+            //В случай че всички полета са валидни категорията бива създадена
             if (ModelState.IsValid)
             {
                 _context.Add(category);
@@ -46,32 +53,41 @@ namespace RentACar.Controllers
             return View(category);
         }
 
+        //Метод за визуализиране на форма за редактиране на категория
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Edit(int? id)
         {
+            //Ако Idто не бъде пратено на контролера или в базата няма категории бива хвърлена грешка
             if (id == null || _context.Categories == null)
             {
                 return RedirectToAction("NotFound", "Error");
             }
 
+            //Намиране на категорията, която искаме да редактираме
             var category = await _context.Categories.FindAsync(id);
+
+            //Ако категорията не бъде намерена в базата бива хвърлена грешка
             if (category == null)
             {
                 return RedirectToAction("NotFound", "Error");
             }
+
             return View(category);
         }
 
+        //Метод за редактиране на категорията
+        [Authorize(Roles = "Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
         {
+            //Ако двете id-та не са еднакви бива хвърлена грешка
             if (id != category.Id)
             {
                 return RedirectToAction("NotFound", "Error");
             }
 
-            
-
+            //В случай че всички полета са валидни категорията бива редактирана 
             if (ModelState.IsValid)
             {
                 try
@@ -92,30 +108,39 @@ namespace RentACar.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(category);
         }
 
+        //Метод за изтриване на категория
+        [Authorize(Roles = "Employee")]
         public async Task<IActionResult> Delete(int? id)
         {
+            //Ако id-то не бъде изпратено бива хвърлена грешка
             if (id == null)
             {
                 return RedirectToAction("NotFound", "Error");
             }
 
+            //Ако не съществуват категории в базата бива хвърлена грешка
             if (_context.Categories == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Categories'  is null.");
             }
 
+            //Намиране на всички коли с тази категория
             var carsWithCategory = _context.Cars.Where(c => c.CategoryId == id).ToList();
 
+            //Ако има такива не бива позволено да се изтрие категорията
             if (carsWithCategory.Any())
             {
                 return RedirectToAction("Rented", "Error");
             }
 
+            //Ако няма такива категорията бива намерена по своето id
             var category = await _context.Categories.FindAsync(id);
 
+            //Ако категорията съществува тя бива изтрита
             if (category != null)
             {
                 _context.Categories.Remove(category);
@@ -125,6 +150,7 @@ namespace RentACar.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        //Метод за откриване дали категория съществува в базата
         private bool CategoryExists(int id)
         {
           return (_context.Categories?.Any(e => e.Id == id)).GetValueOrDefault();
